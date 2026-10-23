@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AKARI AI — Pratinjau</title>
+<style>
+:root{--akari:#D71920;--ink:#111;--paper:#fff;--mist:#F5F5F5;--line:#E5E5E5;--night:#0B0B0B;--z5:#71717a}
+*{margin:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:var(--paper);color:var(--ink)}
+.toggle{position:fixed;top:14px;right:14px;z-index:99;display:flex;gap:8px}
+.toggle button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 18px;font-weight:600;cursor:pointer;font-size:13px}
+.toggle button.on{background:var(--akari);color:#fff;border-color:var(--akari)}
+/* NAV */
+nav{position:sticky;top:0;display:flex;align-items:center;gap:26px;padding:0 5%;height:64px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px}
+.mark{width:30px;height:30px;border-radius:50%;background:var(--akari);display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px}
+.mark::after{content:"·";position:absolute;margin:-16px 0 0 18px;font-size:18px}
+nav a{text-decoration:none;color:var(--z5);font-size:14px}
+nav a:hover{color:var(--ink)}
+.btn{background:var(--akari);color:#fff;border-radius:99px;padding:9px 22px;font-weight:600;font-size:13px;text-decoration:none;border:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.spacer{margin-left:auto;display:flex;align-items:center;gap:12px}
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:90px 5% 70px;max-width:1200px;margin:auto}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--mist);border-radius:99px;padding:7px 16px;font-size:12px;color:var(--z5)}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--akari)}
+h1{font-size:52px;line-height:1.1;letter-spacing:-1.5px;margin:22px 0 18px;font-weight:700}
+.sub{color:var(--z5);font-size:17px;max-width:440px;line-height:1.6}
+.cta{display:flex;gap:14px;margin-top:32px}
+.cta .btn{padding:15px 32px;font-size:15px;border-radius:99px}
+.cta .btn.ghost{padding:15px 32px;font-size:15px}
+/* preview card */
+.pcard{border:1px solid var(--line);border-radius:18px;background:#fafafa;box-shadow:0 20px 50px rgba(0,0,0,.06);overflow:hidden}
+.phead{display:flex;gap:6px;align-items:center;padding:12px 16px;background:var(--mist);border-bottom:1px solid var(--line);font-size:11px;color:var(--z5)}
+.dot{width:9px;height:9px;border-radius:50%;background:#d4d4d8}
+.dot.r{background:var(--akari)}
+.pbody{padding:20px;display:flex;flex-direction:column;gap:14px;min-height:280px}
+.bub{background:var(--akari);color:#fff;border-radius:16px 16px 4px 16px;padding:12px 16px;font-size:13.5px;align-self:flex-end;max-width:85%}
+.bub.a{background:var(--mist);color:#3f3f46;border-radius:16px 16px 16px 4px;align-self:flex-start}
+.pin{border:1px solid var(--line);border-radius:99px;padding:12px 18px;color:var(--z5);font-size:13px;display:flex;justify-content:space-between;align-items:center;background:#fff}
+.pin span{width:30px;height:30px;border-radius:50%;background:var(--akari);color:#fff;display:grid;place-items:center;font-size:14px}
+/* SECTIONS */
+section{padding:70px 5%;max-width:1200px;margin:auto}
+section h2{font-size:32px;letter-spacing:-.5px}
+section .lead{color:var(--z5);margin-top:10px}
+.gray{background:var(--mist)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;transition:.2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.07)}
+.ic{width:42px;height:42px;border-radius:12px;background:#fbe7e8;color:var(--akari);display:grid;place-items:center;font-size:18px;font-weight:800}
+.card h3{font-size:15px;margin:14px 0 6px}
+.card p{font-size:13px;color:var(--z5);line-height:1.55}
+/* models */
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+.ok{color:#16a34a;font-size:12px}.ok::before{content:"●";font-size:9px;margin-right:5px}
+.model-id{font-family:monospace;font-size:11px;color:var(--z5);margin-top:6px}
+.mlink{color:var(--akari);font-weight:600;font-size:13px;margin-top:16px;display:inline-block;text-decoration:none}
+/* japan */
+.japan{background:var(--ink);color:#fff;max-width:none}
+.jwrap{max-width:1200px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:50px}
+.kanji-big{font-size:80px;color:var(--akari);font-weight:700}
+.japan .lead{color:#a1a1aa}
+.jgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.jcard{background:#1b1b1b;border:1px solid #333;border-radius:16px;padding:20px}
+.jcard .k{font-size:26px;color:var(--akari);font-weight:700}
+.jcard b{display:block;margin:8px 0 4px;font-size:13px}
+.jcard p{font-size:12px;color:#a1a1aa;line-height:1.5}
+/* cta + footer */
+.cta2{text-align:center;padding:80px 5%}
+.cta2 .mark{width:52px;height:52px;font-size:20px;margin:0 auto 20px}
+footer{border-top:1px solid var(--line);padding:40px 5%;display:flex;justify-content:space-between;font-size:12px;color:var(--z5);max-width:1200px;margin:auto}
+/* CHAT VIEW */
+#view-chat{display:none;height:100vh;background:var(--night);color:#e4e4e7}
+.cwrap{display:grid;grid-template-columns:280px 1fr;height:100vh}
+.side{background:#131313;border-right:1px solid #262626;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
+.newchat{background:var(--akari);color:#fff;border:none;border-radius:99px;padding:13px;font-weight:700;cursor:pointer;font-size:14px}
+.search{background:#1d1d1d;border:1px solid #262626;border-radius:99px;padding:11px 16px;color:#71717a;font-size:12.5px}
+.conv{padding:11px 14px;border-radius:10px;font-size:13px;color:#a1a1aa;cursor:pointer}
+.conv.on{background:#2a1214;color:#fff;box-shadow:inset 3px 0 0 var(--akari)}
+.sidefoot{margin-top:auto;background:#1a1a1a;border:1px solid #262626;border-radius:12px;padding:12px 14px;font-size:12px}
+.sidefoot small{color:#71717a;font-size:10.5px}
+.main{display:flex;flex-direction:column}
+.mhead{height:62px;border-bottom:1px solid #262626;display:flex;align-items:center;justify-content:center}
+.msel{background:#1a1a1a;border:1px solid #262626;border-radius:99px;padding:9px 22px;font-size:13px;font-weight:600}
+.mbody{flex:1;overflow-y:auto;padding:26px;max-width:800px;margin:auto;width:100%}
+.msg{display:flex;gap:12px;margin-bottom:22px}
+.msg.u{flex-direction:row-reverse}
+.ava{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-weight:700;font-size:12px}
+.ava.u{background:var(--akari);color:#fff}
+.ava.a{background:#2a1214;color:var(--akari)}
+.bubw{max-width:78%}
+.bubw .bub{font-size:14px;line-height:1.65}
+.bubw .bub.u{border-radius:16px 16px 4px 16px}
+pre{background:#161616;border:1px solid #262626;border-radius:12px;padding:14px;font-size:12.5px;color:#7dd3fc;overflow-x:auto;margin-top:10px;font-family:monospace}
+.acts{margin-top:8px;display:flex;gap:14px;font-size:11.5px;color:#71717a}
+.minput{padding:16px 26px 22px;max-width:800px;margin:auto;width:100%}
+.ibox{background:#1a1a1a;border:1px solid #3a3a3a;border-radius:99px;padding:8px 8px 8px 22px;display:flex;align-items:center;gap:10px}
+.ibox span{color:#71717a;font-size:14px;flex:1}
+.send{width:40px;height:40px;border-radius:50%;background:var(--akari);color:#fff;display:grid;place-items:center;border:none;cursor:pointer;font-size:15px}
+.inote{text-align:center;font-size:10.5px;color:#52525b;margin-top:10px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.mgrid{grid-template-columns:1fr}.jwrap{grid-template-columns:1fr}h1{font-size:38px}.side{display:none}}
+</style>
+</head>
+<body>
+<div class="toggle">
+  <button id="b-landing" class="on" onclick="show('landing')">Landing Page</button>
+  <button id="b-chat" onclick="show('chat')">Chat AI</button>
+</div>
+
+<!-- ============ LANDING ============ -->
+<div id="view-landing">
+<nav>
+  <div class="logo"><div class="mark">A</div>AKARI <span style="color:var(--akari)">AI</span></div>
+  <a href="#">Beranda</a><a href="#fitur">Fitur</a><a href="#model">Model</a><a href="#jepang">Tentang</a>
+  <div class="spacer">
+    <a href="#" style="font-size:12.5px">Bahasa Indonesia ▾</a>
+    <a href="#" class="btn ghost">Masuk</a>
+    <a href="#" class="btn">Mulai Sekarang</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div>
+    <span class="badge"><i></i>Asisten AI · oleh Gunawan Group</span>
+    <h1>Kecerdasan,<br>dengan kejernihan.</h1>
+    <p class="sub">Temukan cara yang lebih cerdas untuk berpikir, berkreasi, belajar, dan memecahkan masalah dengan AI.</p>
+    <div class="cta"><a class="btn" href="#" onclick="show('chat');return false">Mulai Chatting</a><a class="btn ghost" href="#fitur">Jelajahi Fitur</a></div>
+  </div>
+  <div class="pcard">
+    <div class="phead"><span class="dot"></span><span class="dot"></span><span class="dot r"></span>&nbsp; AKARI AI</div>
+    <div class="pbody">
+      <div class="bub">Tanyakan apa saja. Dapatkan jawaban yang jelas.</div>
+      <div class="bub a">Tentu. Kesederhanaan adalah inti dari AKARI AI — setiap jawaban dibuat jelas dan langsung.</div>
+      <div class="pin">Kirim pesan ke AKARI AI… <span>↑</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="fitur" class="gray" style="max-width:none"><div style="max-width:1200px;margin:auto">
+  <h2>Semua yang Anda butuhkan</h2><p class="lead">Dirancang untuk kejelasan, kecepatan, dan privasi.</p>
+  <div class="grid">
+    <div class="card"><div class="ic">💬</div><h3>Obrolan AI Cerdas</h3><p>Percakapan mendalam dengan model AI modern.</p></div>
+    <div class="card"><div class="ic">🌐</div><h3>Dukungan Multibahasa</h3><p>Berinteraksi natural dalam 5 bahasa.</p></div>
+    <div class="card"><div class="ic">⚡</div><h3>Respons Cepat</h3><p>Jawaban cepat untuk setiap pertanyaan.</p></div>
+    <div class="card"><div class="ic">✨</div><h3>Bantuan Kreatif</h3><p>Ide, naskah, dan konten kreatif sesuai permintaan.</p></div>
+    <div class="card"><div class="ic">⌨️</div><h3>Asisten Coding</h3><p>Menulis, menjelaskan, dan memperbaiki kode.</p></div>
+    <div class="card"><div class="ic">✍️</div><h3>Menulis dan Riset</h3><p>Draf, ringkasan, dan riset terstruktur.</p></div>
+    <div class="card"><div class="ic">🕘</div><h3>Riwayat Percakapan</h3><p>Simpan dan kelola percakapan Anda.</p></div>
+    <div class="card"><div class="ic">🔒</div><h3>Privasi &amp; Keamanan</h3><p>Kunci API aman di server, tak pernah di browser.</p></div>
+  </div>
+</div></section>
+
+<section id="model">
+  <h2>Pilih model AI Anda</h2><p class="lead">Hanya penyedia yang benar-benar terkonfigurasi yang ditampilkan.</p>
+  <div class="mgrid">
+    <div class="card"><span style="font-size:11px;font-weight:700;color:var(--z5)">GROQ</span> <span class="ok" style="float:right">Tersedia</span><h3 style="margin-top:10px">Llama 3.3 70B (Groq)</h3><div class="model-id">llama-3.3-70b-versatile</div><a class="mlink" href="#" onclick="show('chat');return false">Buka chat →</a></div>
+    <div class="card"><span style="font-size:11px;font-weight:700;color:var(--z5)">ANTHROPIC</span> <span class="ok" style="float:right">Tersedia</span><h3 style="margin-top:10px">Claude Sonnet 4.5</h3><div class="model-id">claude-sonnet-4-5</div><a class="mlink" href="#" onclick="show('chat');return false">Buka chat →</a></div>
+    <div class="card"><span style="font-size:11px;font-weight:700;color:var(--z5)">ANTHROPIC</span> <span class="ok" style="float:right">Tersedia</span><h3 style="margin-top:10px">Claude Haiku 4.5</h3><div class="model-id">claude-haiku-4-5</div><a class="mlink" href="#" onclick="show('chat');return false">Buka chat →</a></div>
+  </div>
+</section>
+
+<section id="jepang" class="japan"><div class="jwrap">
+  <div>
+    <div class="kanji-big">間</div>
+    <h2>Terinspirasi dari kesederhanaan Jepang</h2>
+    <p class="lead" style="margin-top:12px">間 (Ma) — keindahan ruang, ketenangan, dan ketepatan.</p>
+    <p style="margin-top:18px;color:#d4d4d8;font-size:14px;line-height:1.7">AKARI AI dibangun di atas empat prinsip desain Jepang: hilangkan yang tidak perlu, jadikan setiap jawaban jelas, kejar ketepatan di setiap detail, dan terus berinovasi dengan tenang.</p>
+  </div>
+  <div class="jgrid">
+    <div class="jcard"><div class="k">簡潔</div><b>Kanketsu</b><p>Kesederhanaan — hapus yang tidak perlu.</p></div>
+    <div class="jcard"><div class="k">明晰</div><b>Meiseki</b><p>Kejelasan — setiap jawaban terbaca.</p></div>
+    <div class="jcard"><div class="k">精密</div><b>Seimitsu</b><p>Ketepatan — teliti di setiap detail.</p></div>
+    <div class="jcard"><div class="k">革新</div><b>Kakushin</b><p>Inovasi — kemajuan tenang &amp; terus-menerus.</p></div>
+  </div>
+</div></section>
+
+<div class="cta2">
+  <div class="mark">A</div>
+  <h2>Ide Anda layak mendapatkan kecerdasan yang lebih baik.</h2>
+  <p class="lead" style="margin-top:10px">Mulai percakapan dengan AKARI AI hari ini.</p>
+  <a class="btn" href="#" style="display:inline-block;margin-top:28px;padding:16px 40px;font-size:15px" onclick="show('chat');return false">Coba AKARI AI</a>
+</div>
+
+<footer>
+  <div><b style="color:var(--ink)">AKARI <span style="color:var(--akari)">AI</span></b><br>Intelligence, with clarity.</div>
+  <div>© 2026 AKARI AI. Hak cipta dilindungi.</div>
+  <div>Dikembangkan oleh Gunawan Group</div>
+</footer>
+</div>
+
+<!-- ============ CHAT ============ -->
+<div id="view-chat">
+<div class="cwrap">
+  <aside class="side">
+    <div class="logo" style="color:#fff"><div class="mark">A</div>AKARI <span style="color:var(--akari)">AI</span></div>
+    <button class="newchat">+ &nbsp;Chat Baru</button>
+    <div class="search">Cari percakapan…</div>
+    <div class="conv on">Ide konten Instagram</div>
+    <div class="conv">Debug React useEffect</div>
+    <div class="conv">Email proposal klien</div>
+    <div class="conv">Rangkuman makalah AI</div>
+    <div class="sidefoot"><b>Pengguna demo</b><br><small>Tersimpan lokal di browser</small></div>
+  </aside>
+  <div class="main">
+    <div class="mhead"><div class="msel">▴ &nbsp;Claude Sonnet 4.5</div></div>
+    <div class="mbody">
+      <div class="msg u">
+        <div class="ava u">A</div>
+        <div class="bubw"><div class="bub u">Jelaskan konsep 間 (Ma) dengan sederhana</div></div>
+      </div>
+      <div class="msg">
+        <div class="ava a">A</div>
+        <div class="bubw">
+          <div class="bub a">Ma (間) adalah konsep Jepang tentang ruang kosong — bukan ketiadaan, melainkan jeda yang memberi makna.<br><br>Tiga poin pentingnya:<br>1. Ruang napas dalam desain dan percakapan<br>2. Ketenangan sebelum mengambil keputusan<br>3. Kejelasan lahir dari penyederhanaan</div>
+          <pre>function clarity(x) {
+  return simplify(x);  // hapus yang tak perlu
+}</pre>
+          <div class="acts"><span>Salin</span><span>Buat ulang</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="minput">
+      <div class="ibox"><span>Kirim pesan ke AKARI AI…</span><button class="send">↑</button></div>
+      <div class="inote">AKARI AI · oleh Gunawan Group</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function show(v){
+  document.getElementById('view-landing').style.display = v==='landing'?'block':'none';
+  document.getElementById('view-chat').style.display = v==='chat'?'block':'none';
+  document.getElementById('b-landing').classList.toggle('on', v==='landing');
+  document.getElementById('b-chat').classList.toggle('on', v==='chat');
+  document.body.style.background = v==='chat' ? '#0B0B0B' : '#fff';
+}
+</script>
+</body>
+</html>
